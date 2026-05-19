@@ -11,8 +11,7 @@
     region: us-east-1
 
     instances:
-      - redis
-      - mysql
+      - mongodb
 
   tasks:
 
