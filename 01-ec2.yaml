@@ -1,5 +1,6 @@
 - name: create the ec2 instance
   hosts: localhost
+  connection: local
   become: yes
 
   vars:
@@ -7,7 +8,7 @@
     sg_id: sg-0d45d6251e7b55a6a
     zone_id: Z04726272EU5J4JM1J4UL
     domain_name: daws86.icu
-    region: us-est-1
+    region: us-east-1
 
     instances:
       - redis
@@ -15,19 +16,19 @@
 
   tasks:
 
-    # creating the ec2 instances
     - name: create ec2 instance
       amazon.aws.ec2_instance:
         name: "{{ item }}"
         instance_type: t3.micro
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
+        region: "{{ region }}"
+        wait: yes
         tags:
           Name: "{{ item }}"
       loop: "{{ instances }}"
       register: ec2_output
 
-    # creating the route53 records
     - name: create route53 record
       amazon.aws.route53:
         state: present
